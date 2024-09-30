@@ -30,7 +30,7 @@ for i, d in enumerate(random_dicts):
                 common_dict[key] = (value, f"{key}_{i + 1}")  # Store value and new key name
         else:
             # If the key is not in common_dict, add it with its value and original key
-            common_dict[key] = (value, key)
+            common_dict[key] = (value, f"{key}_{i + 1}")
 
 # Prepare the final dictionary with the required format
 final_dict = {}
