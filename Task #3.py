@@ -13,7 +13,7 @@ text = r"""homEwork:
 
 
 
-  last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
+  last iz TO calculate nuMber OF Whitespace characteRS in this Text. caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
 
 sentences = text.split('. ')
 
@@ -29,6 +29,16 @@ formatted_text = '. '.join(capitalized_sentences)
 
 formatted_text = re.sub(r'\biz\b', 'is', formatted_text)
 
-print(formatted_text)
+# Step 4: Extract the last words of each sentence
+statements = formatted_text.split('.')
+last_words = [statement.strip().split()[-1] for statement in statements if statement.strip()]
+new_statement = ' '.join(last_words)
+new_statement = new_statement.capitalize()
 
+# Step 5: Add the new sentence to the end of the paragraph
+final_text = formatted_text.strip() + ' ' + new_statement + '.'
 
+whitespace_count = sum(1 for char in final_text if char.isspace())
+
+print (final_text)
+print (whitespace_count)
