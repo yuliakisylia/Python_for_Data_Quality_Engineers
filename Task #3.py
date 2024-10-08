@@ -27,7 +27,13 @@ for sentence in sentences:
 
 formatted_text = '. '.join(capitalized_sentences)
 
-formatted_text = re.sub(r'\biz\b', 'is', formatted_text)
+
+words = formatted_text.split()
+for i in range(len(words)):
+    if words[i].lower() == "iz":
+        if i > 0 and words[i - 1].lower() == "fix":
+            continue
+        words[i] = "is"
 
 # Step 4: Extract the last words of each sentence
 statements = formatted_text.split('.')
@@ -42,3 +48,5 @@ whitespace_count = sum(1 for char in final_text if char.isspace())
 
 print (final_text)
 print (whitespace_count)
+
+
