@@ -35,13 +35,13 @@ for i in range(len(words)):
             continue
         words[i] = "is"
 
-# Step 4: Extract the last words of each sentence
+# Extract the last words of each sentence
 statements = formatted_text.split('.')
 last_words = [statement.strip().split()[-1] for statement in statements if statement.strip()]
 new_statement = ' '.join(last_words)
 new_statement = new_statement.capitalize()
 
-# Step 5: Add the new sentence to the end of the paragraph
+# Add the new sentence to the end of the paragraph
 final_text = formatted_text.strip() + ' ' + new_statement + '.'
 
 whitespace_count = sum(1 for char in final_text if char.isspace())
