@@ -47,8 +47,9 @@ class CustomEntry(Record):
 
 # Main tool class to handle user interaction and file writing
 class NewsFeedTool:
-    def __init__(self, filename="user_generated_news_feed.txt"):
-        self.filename = filename
+    def __init__(self):
+        # Prompt user for file path or use default
+        self.filename = input("Enter the file path to save records (or press Enter for default 'user_generated_news_feed.txt'): ") or "user_generated_news_feed.txt"
 
     def get_news(self):
         text = input("Enter the news text: ")
