@@ -48,7 +48,6 @@ class CustomEntry(Record):
 # Main tool class to handle user interaction and file writing
 class NewsFeedTool:
     def __init__(self):
-        # Prompt user for file path or use default
         self.filename = input("Enter the file path to save records (or press Enter for default 'user_generated_news_feed.txt'): ") or "user_generated_news_feed.txt"
 
     def get_news(self):
@@ -72,15 +71,39 @@ class NewsFeedTool:
             file.write(record.publish() + "\n")
         print("Record added successfully!")
 
+    def process_file(self, file_path):
+        try:
+            with open(file_path, "r") as file:
+                lines = file.readlines()
+
+            for line in lines:
+                # Example: Assume each line is a simple news record formatted as "text | city"
+                record_data = line.strip().split(" | ")
+                if len(record_data) == 2:
+                    record = News(record_data[0], record_data[1])
+                    self.publish_record(record)
+                else:
+                    print("Invalid record format in file.")
+
+            # If everything was processed successfully, remove the file
+            os.remove(file_path)
+            print(f"File '{file_path}' successfully processed and removed.")
+
+        except FileNotFoundError:
+            print(f"File '{file_path}' not found.")
+        except Exception as e:
+            print(f"An error occurred while processing the file: {e}")
+
     def run(self):
         while True:
             print("\nSelect the type of record you want to add:")
             print("1. News")
             print("2. Private Ad")
             print("3. Custom Entry")
-            print("4. Exit")
+            print("4. Process records from file")
+            print("5. Exit")
 
-            choice = input("Enter your choice (1-4): ")
+            choice = input("Enter your choice (1-5): ")
 
             if choice == '1':
                 record = self.get_news()
@@ -92,6 +115,9 @@ class NewsFeedTool:
                 record = self.get_custom_entry()
                 self.publish_record(record)
             elif choice == '4':
+                file_path = input("Enter the path to the file to process: ")
+                self.process_file(file_path)
+            elif choice == '5':
                 print("Exiting the tool.")
                 break
             else:
