@@ -32,15 +32,16 @@ class PrivateAd(Record):
         return f"Private Ad: {self.text} | Expires in: {self.days_left} days | Published on: {self.date_published}"
 
 
-# Custom record class (you can customize the rules for publishing here)
-class CustomEntry(Record):
-    def __init__(self, custom_type, text, additional_info):
+# Dating Ad class
+class DatingAd(Record):
+    def __init__(self, text, age, interests, contact_info):
         super().__init__(text)
-        self.custom_type = custom_type
-        self.additional_info = additional_info
+        self.age = age
+        self.interests = interests
+        self.contact_info = contact_info
 
     def publish(self):
-        return f"{self.custom_type}: {self.text} | Additional Info: {self.additional_info} | Published on: {self.date_published}"
+        return f"Dating Ad: {self.text} | Age: {self.age} | Interests: {self.interests} | Contact: {self.contact_info} | Published on: {self.date_published}"
 
 
 # Main tool class to handle user interaction and file writing
@@ -55,8 +56,26 @@ class NewsFeedTool:
 
     def get_private_ad(self):
         text = input("Enter the private ad text: ")
-        expiration_date = input("Enter the expiration date (YYYY-MM-DD): ")
+        while True:
+            expiration_date = input("Enter the expiration date (YYYY-MM-DD): ")
+            try:
+                exp_date = datetime.datetime.strptime(expiration_date, "%Y-%m-%d")
+                if exp_date < datetime.datetime.now():
+                    print("Error: Expiration date must be today or in the future. Please try again.")
+                elif exp_date == datetime.datetime.now():
+                    print("Error: Expiration date cannot be today. Please enter a future date.")
+                else:
+                    break
+            except ValueError:
+                print("Invalid date format. Please use YYYY-MM-DD.")
         return PrivateAd(text, expiration_date)
+
+    def get_dating_ad(self):
+        text = input("Enter the text for the dating ad: ")
+        age = input("Enter the age: ")
+        interests = input("Enter interests: ")
+        contact_info = input("Enter contact info: ")
+        return DatingAd(text, age, interests, contact_info)
 
     def get_custom_entry(self):
         custom_type = input("Enter custom record type: ")
@@ -74,18 +93,21 @@ class NewsFeedTool:
             print("\nSelect the type of record you want to add:")
             print("1. News")
             print("2. Private Ad")
-            print("3. Custom Entry")
-            print("4. Exit")
+            print("3. Dating Ad")
+            print("4. Custom Entry")
+            print("5. Exit")
 
-            choice = input("Enter your choice (1-4): ")
+            choice = input("Enter your choice (1-5): ")
 
             if choice == '1':
                 record = self.get_news()
             elif choice == '2':
                 record = self.get_private_ad()
             elif choice == '3':
-                record = self.get_custom_entry()
+                record = self.get_dating_ad()
             elif choice == '4':
+                record = self.get_custom_entry()
+            elif choice == '5':
                 print("Exiting the tool.")
                 break
             else:
