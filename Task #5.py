@@ -60,10 +60,8 @@ class NewsFeedTool:
             expiration_date = input("Enter the expiration date (YYYY-MM-DD): ")
             try:
                 exp_date = datetime.datetime.strptime(expiration_date, "%Y-%m-%d")
-                if exp_date < datetime.datetime.now():
-                    print("Error: Expiration date must be today or in the future. Please try again.")
-                elif exp_date == datetime.datetime.now():
-                    print("Error: Expiration date cannot be today. Please enter a future date.")
+                if exp_date <= datetime.datetime.now():
+                    print("Error: Expiration date must be a future date. Please try again.")
                 else:
                     break
             except ValueError:
@@ -77,12 +75,6 @@ class NewsFeedTool:
         contact_info = input("Enter contact info: ")
         return DatingAd(text, age, interests, contact_info)
 
-    def get_custom_entry(self):
-        custom_type = input("Enter custom record type: ")
-        text = input(f"Enter the text for {custom_type}: ")
-        additional_info = input("Enter any additional information: ")
-        return CustomEntry(custom_type, text, additional_info)
-
     def publish_record(self, record):
         with open(self.filename, "a") as file:
             file.write(record.publish() + "\n")
@@ -94,10 +86,9 @@ class NewsFeedTool:
             print("1. News")
             print("2. Private Ad")
             print("3. Dating Ad")
-            print("4. Custom Entry")
-            print("5. Exit")
+            print("4. Exit")
 
-            choice = input("Enter your choice (1-5): ")
+            choice = input("Enter your choice (1-4): ")
 
             if choice == '1':
                 record = self.get_news()
@@ -106,8 +97,6 @@ class NewsFeedTool:
             elif choice == '3':
                 record = self.get_dating_ad()
             elif choice == '4':
-                record = self.get_custom_entry()
-            elif choice == '5':
                 print("Exiting the tool.")
                 break
             else:
