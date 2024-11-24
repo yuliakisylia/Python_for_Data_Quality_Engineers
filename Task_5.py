@@ -10,7 +10,6 @@ class Record:
     def publish(self):
         raise NotImplementedError("Subclasses must implement the publish method.")
 
-
 # News class
 class News(Record):
     def __init__(self, text, city):
