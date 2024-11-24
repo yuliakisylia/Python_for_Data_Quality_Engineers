@@ -27,7 +27,7 @@ def create_final_dict(common_dict):
 
 def main():
     random_dicts = generate_random_dicts()
-    print( random_dicts)
+   # print( random_dicts)
 
     common_dict = {}
     index = 0
@@ -37,7 +37,7 @@ def main():
         index += 1  # Manually increment the index
 
     final_dict = create_final_dict(common_dict)
-    print(final_dict)
+   # print(final_dict)
 
 
 # Call the main function directly
@@ -104,6 +104,6 @@ text = r"""homEwork:
   last iz TO calculate nuMber OF Whitespace characteRS in this Text. caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
 
 # Call the main function and print results
-final_text, whitespace_count = main(text)
-print(final_text)
-print(whitespace_count)
+#final_text, whitespace_count = main(text)
+#print(final_text)
+#print(whitespace_count)
