@@ -6,19 +6,18 @@ import re
 import json
 import xml.etree.ElementTree as ET
 import sqlite3
-from Task_4 import normalize_case  # Импорт функции нормализации из Task_4
+from Task_4 import normalize_case
 
-# Класс для записи
+
 class Record:
     def __init__(self, text):
-        self.text = normalize_case([text])[0]  # Применение нормализации к тексту
+        self.text = normalize_case([text])[0]
         self.date_published = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def publish(self):
         raise NotImplementedError("Subclasses must implement the publish method.")
 
 
-# Классы для различных типов записей
 class News(Record):
     def __init__(self, text, city):
         super().__init__(text)
@@ -49,7 +48,6 @@ class DatingAd(Record):
         return f"Dating Ad: {self.text} | Age: {self.age} | Interests: {self.interests} | Contact: {self.contact_info} | Published on: {self.date_published}"
 
 
-# Класс для обработки XML
 class XMLRecordProcessor:
     def __init__(self):
         pass
@@ -74,7 +72,7 @@ class XMLRecordProcessor:
             print(f"\nError: Unable to read the file. Details: {str(e)}\n")
             return
 
-        records = root.findall("record")  # Assumes each record is wrapped in <record> tags
+        records = root.findall("record")
         for record in records:
             try:
                 record_type = record.find("type").text.lower()
@@ -107,13 +105,12 @@ class XMLRecordProcessor:
         print(f"File {file_path} has been removed.\n")
 
     def publish_record(self, record):
-        # Запись в текстовый файл
         with open("user_generated_news_feed.txt", "a", encoding="utf-8") as file:
             file.write(record.publish() + "\n")
         print("Record added successfully!")
 
 
-# Класс для работы с базой данных SQLite
+
 class DatabaseHandler:
     def __init__(self, db_name="records.db"):
         self.db_name = db_name
@@ -138,7 +135,6 @@ class DatabaseHandler:
         self.connection.commit()
 
     def insert_record(self, record):
-        # Проверка на дублирование
         if not isinstance(record.text, str) or not isinstance(record.date_published, str):
             print(f"Error: Invalid types for text or date_published. Received types: {type(record.text)}, {type(record.date_published)}")
             return
@@ -149,11 +145,11 @@ class DatabaseHandler:
             print("Error: Duplicate record found, not inserted.")
             return
 
-        # Вставка записи в базу данных
+
         params = (
             record.text,
             record.date_published,
-            record.__class__.__name__.lower(),  # Сохраняем тип записи (news, private_ad, dating_ad)
+            record.__class__.__name__.lower(),
             record.city if hasattr(record, 'city') else None,
             record.expiration_date if hasattr(record, 'expiration_date') else None,
             record.age if hasattr(record, 'age') else None,
@@ -172,12 +168,12 @@ class DatabaseHandler:
             print(f"SQLite error occurred: {e}")
 
 
-# Основной класс для работы с пользовательскими вводами
+
 class NewsFeedTool:
     def __init__(self, filename="user_generated_news_feed.txt"):
         self.filename = filename
-        self.xml_processor = XMLRecordProcessor()  # Создание экземпляра для работы с XML
-        self.db_handler = DatabaseHandler()  # Создание экземпляра для работы с базой данных
+        self.xml_processor = XMLRecordProcessor()
+        self.db_handler = DatabaseHandler()
 
     def get_news(self):
         text = input("Enter the news text: ")
@@ -240,11 +236,11 @@ class NewsFeedTool:
                 print("Invalid choice. Please try again.")
                 continue
 
-            self.db_handler.insert_record(record)  # Вставка записи в базу данных
-            self.publish_record(record)  # Публикация записи в файл
+            self.db_handler.insert_record(record)
+            self.publish_record(record)
 
 
-# Запуск программы
+
 if __name__ == "__main__":
     tool = NewsFeedTool()
     tool.run()
